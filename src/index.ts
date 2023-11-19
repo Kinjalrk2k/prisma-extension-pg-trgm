@@ -1,21 +1,28 @@
-import { Prisma } from '@prisma/client/extension'
+import { Prisma, PrismaClient } from "@prisma/client";
+import { SimilarityArgs, SimilarityResult } from "./types";
+import similarity from "./similarity";
+import install from "./install";
 
-type Args = {}
+// TODO: Error handling
+export const withPgTrgm = () => {
+  return Prisma.defineExtension((prisma) => {
+    (async () => await install(prisma))();
 
-export const existsFn = (_extensionArgs: Args) =>
-  Prisma.defineExtension({
-    name: "prisma-extension-find-or-create",
-    model: {
-      $allModels: {
-        async exists<T, A>(
-          this: T,
-          args: Prisma.Exact<A, Prisma.Args<T, 'findFirst'>>
-        ): Promise<boolean> {
-
-          const ctx = Prisma.getExtensionContext(this)
-          const result = await (ctx as any).findFirst(args)
-          return result !== null
+    return prisma.$extends({
+      name: "prisma-extension-pg-trgm",
+      client: {
+        async $install() {
+          return install(prisma);
         },
       },
-    },
-  })
+      model: {
+        $allModels: {
+          async similarity<T, A>(this: T, args: SimilarityArgs<T>): Promise<SimilarityResult<T, A>> {
+            const ctx = Prisma.getExtensionContext(this);
+            return similarity<T, A>(ctx, prisma, args);
+          },
+        },
+      },
+    });
+  });
+};

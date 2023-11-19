@@ -1,22 +1,27 @@
 import { PrismaClient } from "@prisma/client";
-import { existsFn } from "../dist"
+import { withPgTrgm } from "../dist";
 
-const prisma = new PrismaClient().$extends(existsFn({}))
+const prisma = new PrismaClient().$extends(withPgTrgm());
 
 async function main() {
-  const user = await prisma.user.exists({ where: { id: 1 } })
-
-  const post = await prisma.post.exists({
-    where: {
-      OR: [
-        { title: { contains: 'prisma' } },
-        { content: { contains: 'prisma' } },
-      ],
-      published: true,
+  const result = await prisma.post.similarity([
+    { field: "title", text: "interpreter", type: "SIMILARITY", order: "DESC" },
+    {
+      field: "title",
+      text: "interpreter",
+      type: "WORD_SIMILARITY",
+      threshold: 0.01,
+      thresholdCompare: "GT",
     },
-  })
-
-  console.log({ user, post })
+    {
+      field: "title",
+      text: "interpreter",
+      type: "STRICT_WORD_SIMILARITY",
+      threshold: 0.002,
+      thresholdCompare: "GT",
+    },
+  ]);
+  console.log(result);
 }
 
-main()
+main();

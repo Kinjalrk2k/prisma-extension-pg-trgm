@@ -1,11 +1,11 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import { SimilarityArgs, SimilarityResult } from "./types";
+import { SimilarityArgs, SimilarityResult } from "./similarity/types";
 import similarity from "./similarity";
 import install from "./install";
 
-// TODO: Error handling
 export const withPgTrgm = () => {
   return Prisma.defineExtension((prisma) => {
+    // install database extension
     (async () => await install(prisma))();
 
     return prisma.$extends({
@@ -17,7 +17,7 @@ export const withPgTrgm = () => {
       },
       model: {
         $allModels: {
-          async similarity<T, A>(this: T, args: SimilarityArgs<T>): Promise<SimilarityResult<T, A>> {
+          async similarity<T, A>(this: T, args: SimilarityArgs<T>): Promise<SimilarityResult<T, A> | undefined> {
             const ctx = Prisma.getExtensionContext(this);
             return similarity<T, A>(ctx, prisma, args);
           },

@@ -26,4 +26,9 @@ export type SimilarityQueryArgs<T> = {
   [key in Prisma.Args<T, "findFirst">["distinct"]]?: FieldQuery;
 } & { [key: string]: FieldQuery };
 
+export type SimilarityArgs<T> = {
+  query?: SimilarityQueryArgs<T>;
+  __meta?: { tableName: string };
+};
+
 export type SimilarityResult<T, A> = Array<Prisma.Result<T, A, "findFirst"> & { [key: `${string}_score`]: number }>;

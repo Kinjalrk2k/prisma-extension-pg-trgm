@@ -32,6 +32,12 @@ async function main() {
   await prisma.post.createMany({
     data,
   });
+
+  await prisma.tags.create({ data: { tagName: faker.hacker.noun() } });
+  await prisma.tags.create({ data: { tagName: faker.hacker.noun() } });
+  await prisma.tags.create({ data: { tagName: faker.hacker.noun() } });
+  await prisma.tags.create({ data: { tagName: faker.hacker.noun() } });
+  await prisma.tags.create({ data: { tagName: faker.hacker.noun() } });
 }
 
 main()

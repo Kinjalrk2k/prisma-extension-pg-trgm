@@ -24,9 +24,6 @@ async function similarity<T, A>(
      */
     const model = ctx.$name; // model name is the table name!
 
-    console.log(args);
-    console.log(model);
-
     let selectList: string[] = [""]; // for handling comma. check the final query!
     let whereList: string[] = [];
     let orderList: string[] = [];
@@ -74,6 +71,8 @@ async function similarity<T, A>(
               case 'lt': compareOp = "<"; break;
               case 'lte': compareOp = "<="; break;
               case 'eq': compareOp = "="; break;
+              default:
+                throw new Error(`Invalid threshold comparison. Valid comparators: ${comparators.join(", ")}`);
             }
 
             /**
@@ -86,10 +85,8 @@ async function similarity<T, A>(
 
         if (operationQuery?.order) {
           if (!isOrder(operationQuery.order)) {
-            throw new Error(`Invalid odering. Valid ordering: ${orders.join(", ")}`);
+            throw new Error(`Invalid ordering. Valid ordering: ${orders.join(", ")}`);
           }
-
-          console.log(operationQuery?.order);
 
           /**
            * @example SIMILARITY(col_name, 'lorem') DESC

@@ -1,25 +1,26 @@
-import { Prisma, PrismaClient } from "@prisma/client";
-import { SimilarityArgs, SimilarityResult, SimilarityQueryArgs } from "./similarity/types";
+import { Prisma } from "@prisma/client";
+import { SimilarityResult, SimilarityQueryArgs } from "./similarity/types";
 import similarity from "./similarity";
 import install from "./install";
+import { ExtensionArgs } from "./types";
 
-export const withPgTrgm = () => {
+export const withPgTrgm = (extArgs?: ExtensionArgs) => {
   return Prisma.defineExtension((prisma) => {
     // install database extension
-    (async () => await install(prisma))();
+    (async () => await install(prisma, extArgs))();
 
     return prisma.$extends({
       name: "prisma-extension-pg-trgm",
       client: {
         async $install() {
-          return install(prisma);
+          return install(prisma, extArgs);
         },
       },
       model: {
         $allModels: {
           async similarity<T, A>(this: T, args: SimilarityQueryArgs<T>): Promise<SimilarityResult<T, A> | undefined> {
             const ctx = Prisma.getExtensionContext(this);
-            return similarity<T, A>(ctx, prisma, args);
+            return similarity<T, A>(ctx, prisma, args, extArgs);
           },
         },
       },

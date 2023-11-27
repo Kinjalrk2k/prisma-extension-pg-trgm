@@ -1,5 +1,9 @@
-async function install(prisma: any) {
-  await prisma.$queryRawUnsafe(`CREATE EXTENSION IF NOT EXISTS pg_trgm;`);
+import { ExtensionArgs } from "../types";
+
+async function install(prisma: any, extArgs: ExtensionArgs | undefined) {
+  const query = "CREATE EXTENSION IF NOT EXISTS pg_trgm;";
+  extArgs?.logQueries && console.log("[prisma-extension-pg-trgm.install]", query);
+  await prisma.$queryRawUnsafe(query);
 }
 
 export default install;

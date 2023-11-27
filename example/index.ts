@@ -1,27 +1,9 @@
 import { PrismaClient, Prisma } from "@prisma/client";
 import { withPgTrgm } from "../dist";
 
-const prisma = new PrismaClient().$extends(withPgTrgm());
+const prisma = new PrismaClient().$extends(withPgTrgm({ logQueries: true }));
 
 async function main() {
-  // const result = await prisma.post.similarity([
-  //   { field: "title", text: "interpreter", type: "similarity", order: "DESC" },
-  // {
-  //   field: "title",
-  //   text: "interpreter",
-  //   type: "WORD_SIMILARITY",
-  //   threshold: 0.01,
-  //   thresholdCompare: "GT",
-  // },
-  // {
-  //   field: "title",
-  //   text: "interpreter",
-  //   type: "STRICT_WORD_SIMILARITY",
-  //   threshold: 0.002,
-  //   thresholdCompare: "GT",
-  // },
-  // ]);
-
   const result = await prisma.post.similarity({
     title: {
       similarity: { text: "interpreter", order: "desc" },

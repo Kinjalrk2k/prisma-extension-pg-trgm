@@ -1,14 +1,5 @@
 import { Prisma } from "@prisma/client/extension";
 
-export type SimilarityArgs<T> = Array<{
-  field: Prisma.Args<T, "findFirst">["distinct"];
-  type: "SIMILARITY" | "WORD_SIMILARITY" | "STRICT_WORD_SIMILARITY";
-  text: string;
-  threshold?: number;
-  thresholdCompare?: "GT" | "GTE" | "EQ" | "LTE" | "LT";
-  order?: "ASC" | "DESC";
-}>;
-
 export const operations = ["similarity", "word_similarity", "strict_word_similarity"] as const;
 export type Operation = (typeof operations)[number];
 export const isOperation = (x: any): x is Operation => operations.includes(x);

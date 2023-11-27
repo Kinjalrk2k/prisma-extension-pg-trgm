@@ -1,5 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client";
-import { SimilarityArgs, SimilarityResult } from "./similarity/types";
+import { SimilarityArgs, SimilarityResult, SimilarityQueryArgs } from "./similarity/types";
 import similarity from "./similarity";
 import install from "./install";
 
@@ -17,7 +17,7 @@ export const withPgTrgm = () => {
       },
       model: {
         $allModels: {
-          async similarity<T, A>(this: T, args: SimilarityArgs<T>): Promise<SimilarityResult<T, A> | undefined> {
+          async similarity<T, A>(this: T, args: SimilarityQueryArgs<T>): Promise<SimilarityResult<T, A> | undefined> {
             const ctx = Prisma.getExtensionContext(this);
             return similarity<T, A>(ctx, prisma, args);
           },

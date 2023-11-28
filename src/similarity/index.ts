@@ -20,7 +20,7 @@ async function similarity<T, A>(
   try {
     const model = args?.__meta?.tableName || ctx.$name; // model name is the table name!
 
-    console.log(ctx.name);
+    extArgs?.logQueries && console.log("[LOG](prisma-extension-pg-trgm.model)", model);
 
     let selectList: string[] = [""]; // for handling comma. check the final query!
     let whereList: string[] = [];
@@ -113,7 +113,7 @@ async function similarity<T, A>(
      *          ORDER BY similarity(col_name, 'lorem') desc
      */
     const query = `SELECT * ${selectQuery} FROM "${model}" ${whereQuery} ${orderQuery}`;
-    extArgs?.logQueries && console.log("[prisma-extension-pg-trgm.similarity]", query);
+    extArgs?.logQueries && console.log("[LOG](prisma-extension-pg-trgm.query)", query);
 
     const result = await prisma.$queryRawUnsafe(query);
     return result as SimilarityResult<T, A>;

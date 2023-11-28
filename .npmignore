@@ -1,3 +1,4 @@
 src/
 example/
 .vscode/
+tsconfig.json

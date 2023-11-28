@@ -16,7 +16,7 @@ async function main() {
   // console.log(result);
 
   const result2 = await prisma.tags.similarity({
-    query: { tag_name: { similarity: { text: "or" } } },
+    query: { tag_name: { similarity: { text: "or", threshold: { gte: 0.01 }, order: "desc" } } },
     __meta: { tableName: "label" },
   });
   console.log(result2);

@@ -1,6 +1,6 @@
 import { ExtensionArgs } from "../types";
 import {
-  SimilarityQueryArgs,
+  SimilarityQuery,
   SimilarityResult,
   isOperation,
   operations,
@@ -16,7 +16,7 @@ async function similarity<T, A>(
   prisma: any,
   args: SimilarityArgs<T>,
   extArgs: ExtensionArgs | undefined
-): Promise<SimilarityResult<T, A> | undefined> {
+): Promise<SimilarityResult<T, A>> {
   try {
     const model = args?.__meta?.tableName || ctx.$name; // model name is the table name!
 
@@ -47,15 +47,13 @@ async function similarity<T, A>(
           const similarityOperation = `${operation}(${field}, '${operationQuery?.text}')`;
 
           /**
-           * field is same as column names
+           * selectting fields with alias, field is same as column names
            * @example SIMILARITY(col_name, 'lorem') AS col_name_similarity_score
            */
           const q = `${similarityOperation} AS ${field}_${operation}_score`;
           selectList.push(q);
 
           if (operationQuery?.threshold) {
-            // converting comparators to actual comparator operators
-
             Object.keys(operationQuery.threshold).forEach((comparator: string) => {
               if (!isComparator(comparator) || !operationQuery?.threshold) {
                 throw new Error(`Invalid threshold comparison. Valid comparators: ${comparators.join(", ")}`);
@@ -80,6 +78,7 @@ async function similarity<T, A>(
               }
 
               /**
+               * where queries based on similarity thresholds
                * @example SIMILARITY(col_name, 'lorem') > 0.25
                */
               const q = `${similarityOperation} ${compareOp} ${thresholdValue}`;
@@ -93,6 +92,7 @@ async function similarity<T, A>(
             }
 
             /**
+             * ordering based on the similarity scores
              * @example SIMILARITY(col_name, 'lorem') DESC
              */
             const q = `${similarityOperation} ${operationQuery.order}`;
@@ -106,13 +106,19 @@ async function similarity<T, A>(
     const whereQuery = whereList.length ? `WHERE ${whereList.join(" AND ")}` : "";
     const orderQuery = orderList.length ? `ORDER BY ${orderList.join(", ")}` : "";
 
+    /**
+     * @example SELECT * , similarity(col_name, 'lorem') AS col_name_similarity_score
+     *          FROM "table_name"
+     *          WHERE similarity(col_name, 'lorem') >= 0.01
+     *          ORDER BY similarity(col_name, 'lorem') desc
+     */
     const query = `SELECT * ${selectQuery} FROM "${model}" ${whereQuery} ${orderQuery}`;
     extArgs?.logQueries && console.log("[prisma-extension-pg-trgm.similarity]", query);
 
     const result = await prisma.$queryRawUnsafe(query);
     return result as SimilarityResult<T, A>;
   } catch (e) {
-    console.log(e);
+    throw e;
   }
 }
 

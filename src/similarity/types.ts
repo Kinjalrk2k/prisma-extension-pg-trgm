@@ -13,7 +13,7 @@ export type Order = (typeof orders)[number];
 export const isOrder = (x: any): x is Order => orders.includes(x);
 
 export type FieldQuery = {
-  [key in Operation]?: {
+  [operation in Operation]?: {
     text: string;
     threshold?: {
       [key in Comparator]?: number;
@@ -22,13 +22,15 @@ export type FieldQuery = {
   };
 };
 
-export type SimilarityQueryArgs<T> = {
-  [key in Prisma.Args<T, "findFirst">["distinct"]]?: FieldQuery;
-} & { [key: string]: FieldQuery };
+export type SimilarityQuery<T> = {
+  [field in Prisma.Args<T, "findFirst">["distinct"]]?: FieldQuery;
+} & { [field: string]: FieldQuery };
 
 export type SimilarityArgs<T> = {
-  query?: SimilarityQueryArgs<T>;
+  query?: SimilarityQuery<T>;
   __meta?: { tableName: string };
 };
 
-export type SimilarityResult<T, A> = Array<Prisma.Result<T, A, "findFirst"> & { [key: `${string}_score`]: number }>;
+export type SimilarityResult<T, A> = Array<
+  Prisma.Result<T, A, "findFirst"> & { [key: `${string}_score`]: number } & { [key: string]: any }
+>;

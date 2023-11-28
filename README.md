@@ -8,9 +8,9 @@ Extending Prisma Client to support `pg_trgm` functions, exclusively for PostgreS
 - Fully Typed <img src="https://www.typescriptlang.org/favicon-32x32.png" height="16" width="16" alt="" />
 - Support for filtering and sorting based on similarity scores
 - List of functions implemented:
-  - `similarity ( text, text )`
-  - `word_similarity ( text, text )`
-  - `strict_word_similarity ( text, text )`
+  - `similarity (text, text)`
+  - `word_similarity (text, text)`
+  - `strict_word_similarity (text, text)`
 
 ## Installation
 
@@ -70,7 +70,7 @@ Prisma allows you to rename the model and field names using `@@map` and `@map` t
 
 However, the extension has no way to get those modified names. To counter that, look into the following example
 
-Here the `tagName` field has been renamed to `tag_name` and the `tags` model has been renamed to `label`. So, in the database level, you'll find a table name as `label` with a column name as `tag_name`. As this extension relies on [Raw Prisma queries](https://www.prisma.io/docs/concepts/components/prisma-client/raw-database-access#queryrawunsafe), the actual table and colun names are essential
+Here the `tagName` field has been renamed to `tag_name` and the `tags` model has been renamed to `label`. So, in the database level, you'll find a table name as `label` with a column name as `tag_name`. As this extension relies on [Raw Prisma queries](https://www.prisma.io/docs/concepts/components/prisma-client/raw-database-access#queryrawunsafe), the actual table and column names are essential
 
 - Prisma Schema:
 

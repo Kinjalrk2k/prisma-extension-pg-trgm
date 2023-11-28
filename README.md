@@ -27,6 +27,10 @@ import { withPgTrgm } from "prisma-extension-pg-trgm";
 const prisma = new PrismaClient().$extends(withPgTrgm({ logQueries: true }));
 ```
 
+> [!NOTE]
+>
+> `logQueries` can be set to true to log the queries on the console. It's useful for debugging, however should be turned off while deploying to production environments
+
 ## Usage
 
 ### Basic usage
@@ -121,4 +125,4 @@ main();
 - This extension relies on [Raw Prisma queries](https://www.prisma.io/docs/concepts/components/prisma-client/raw-database-access#queryrawunsafe). So, running un-safe queries might come into play. This extension doesn't handle any sanitization of the inputs internally. So, developers implementing this extenstions should put in the right checks before using this in a production system
 - There's currently a quirky way to handle renamed model and field values described [above](#renamed-model-and-field-names). If there's a better way to handle this, please consider opening a [Issue](https://github.com/Kinjalrk2k/prisma-extension-pg-trgm/issues/new) or a [Pull Request](https://github.com/Kinjalrk2k/prisma-extension-pg-trgm/pulls) detailing the approach
 - Selecting specified fields is currently not supported. Currently all the fields in the model as well as the similarity scores are outputted.
-- Joining multiple table are not supported. I'm not a fan of Prisma's joining techniques (https://github.com/prisma/prisma/discussions/12715) and supporting native join might be shelved for a future release
+- Joining tables are not supported. I'm not a fan of Prisma's joining techniques (https://github.com/prisma/prisma/discussions/12715) and supporting native join might be shelved for a future release

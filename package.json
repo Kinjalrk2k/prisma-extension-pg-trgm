@@ -1,6 +1,6 @@
 {
   "name": "prisma-extension-pg-trgm",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Kinjal Raykarmakar",
   "description": "Prisma extension for supporting alphanumeric similarity using PostgreSQL pg_trgm module",
   "keywords": [

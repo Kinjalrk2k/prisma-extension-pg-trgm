@@ -21,6 +21,7 @@ npm install prisma-extension-pg-trgm
 ## Extending Prisma client
 
 ```ts
+import { PrismaClient } from "@prisma/client";
 import { withPgTrgm } from "prisma-extension-pg-trgm";
 
 const prisma = new PrismaClient().$extends(withPgTrgm({ logQueries: true }));

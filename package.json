@@ -1,13 +1,22 @@
 {
   "name": "prisma-client-extension-starter",
   "version": "1.0.0",
-  "author": "",
-  "description": "",
+  "author": "Kinjal Raykarmakar",
+  "description": "Prisma extension for supporting alphanumeric similarity using PostgreSQL pg_trgm module",
   "keywords": [
     "prisma",
     "@prisma/client",
-    "extension"
+    "extension",
+    "pg",
+    "pg_trgm",
+    "postgres",
+    "sql"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kinjalrk2k/prisma-extension-pg-trgm"
+  },
+  "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client/extension";
 import { SimilarityResult, SimilarityQuery, SimilarityArgs } from "./similarity/types";
 import similarity from "./similarity";
 import install from "./install";

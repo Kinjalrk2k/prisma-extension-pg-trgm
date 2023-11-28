@@ -15,13 +15,13 @@ Extending Prisma Client to support `pg_trgm` functions, exclusively for PostgreS
 ## Installation
 
 ```sh
-npm install
+npm install prisma-extension-pg-trgm
 ```
 
 ## Extending Prisma client
 
 ```ts
-import { withPgTrgm } from "../dist";
+import { withPgTrgm } from "prisma-extension-pg-trgm";
 
 const prisma = new PrismaClient().$extends(withPgTrgm({ logQueries: true }));
 ```

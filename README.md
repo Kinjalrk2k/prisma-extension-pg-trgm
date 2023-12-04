@@ -11,6 +11,7 @@ Extending Prisma Client to support `pg_trgm` functions, exclusively for PostgreS
   - `similarity (text, text)`
   - `word_similarity (text, text)`
   - `strict_word_similarity (text, text)`
+- JSDoc
 
 ## Installation
 
